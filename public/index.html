@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <title>Legião Games Arena</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="no-scrollbar">
+    <div class="bg-fx"></div>
+    <div id="toastHost"></div>
+
+    <!-- ===================== LOGIN DO CLIENTE ===================== -->
+    <section id="viewClientLogin" class="hidden">
+      <div class="login-wrap">
+        <form class="glass-panel login-card" id="formLoginCliente">
+          <img class="logo" src="logo.png" alt="Logo" />
+          <h2>Acesso do Cliente</h2>
+          <p class="sub">Digite seu login e código de acesso para ver seu saldo e histórico de compras.</p>
+
+          <input type="text" id="clientLogin" placeholder="Login" autocomplete="username" autocapitalize="off" />
+          <input type="password" id="clientAccessCode" placeholder="Código de acesso" maxlength="6" autocomplete="current-password" autocapitalize="off" />
+          <div id="clientLoginErro" class="login-erro"></div>
+
+          <button type="submit" id="btnEntrarCliente" class="btn-add">Entrar</button>
+          <div class="voltar-link" data-act="mostrarLoginAdmin">Acesso administrativo</div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===================== PAINEL DO CLIENTE ===================== -->
+    <section id="viewClientPanel" class="hidden">
+      <div class="app-shell">
+        <div class="page">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <h2 id="clienteNomeParainel" style="margin: 0;">Carregando...</h2>
+              <p style="color: var(--text-faint); margin: 2px 0 0;">Seus créditos e histórico</p>
+            </div>
+            <button class="btn-ghost" data-act="fazerLogoutCliente" style="width: auto; padding: 8px 14px;">🔓 Sair</button>
+          </div>
+
+          <div class="glass-panel">
+            <h3 style="color: #10b981; margin-top: 0;">Saldo Disponível</h3>
+            <div style="font-size: 28px; font-weight: bold; color: #10b981; margin-bottom: 8px;" id="saldoClienteDisplay">R$ 0.00</div>
+            <div id="creditosClienteDisplay" style="font-size: 12px; color: #aaa;"></div>
+          </div>
+
+          <div class="glass-panel">
+            <h3 style="color: #e9d5ff; margin-top: 0;">Histórico de Compras</h3>
+            <div id="historicoClienteDisplay"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== LOGIN DO ADMIN ===================== -->
+    <section id="viewAdminLogin" class="hidden">
+      <div class="login-wrap">
+        <form class="glass-panel login-card" id="formLoginAdmin">
+          <img class="logo" src="logo.png" alt="Logo" />
+          <h2>Painel Administrativo</h2>
+          <p class="sub">Entre com suas credenciais para gerenciar comandas, clientes e produtos.</p>
+
+          <input type="text" id="loginUsuario" placeholder="Email" autocomplete="username email" autocapitalize="off" inputmode="email" />
+          <input type="password" id="loginSenha" placeholder="Senha" autocomplete="current-password" />
+          <div id="loginErro" class="login-erro"></div>
+
+          <button type="submit" id="btnEntrarAdmin" class="btn-add">Entrar</button>
+          <div class="voltar-link" data-act="mostrarLoginCliente">← Voltar para o acesso do cliente</div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===================== PAINEL DO ADMIN ===================== -->
+    <section id="viewAdminPanel" class="hidden">
+      <div class="app-shell modo-painel">
+        <nav class="sidebar">
+          <div class="brand">
+            <img src="logo.png" alt="Logo" />
+            <div class="brand-text">
+              <strong>Legião Games Arena</strong>
+              <span>Painel de comandas</span>
+            </div>
+          </div>
+
+          <div class="tabs">
+            <button class="active" data-tab="comandasAbertasTab">Abertas</button>
+            <button data-tab="criarComandaTab">Criar Comanda</button>
+            <button data-tab="historico">Histórico</button>
+            <button data-tab="naoPagas">Não pagas</button>
+            <button data-tab="clientes">Clientes</button>
+            <button data-tab="produtos">Produtos</button>
+            <button data-tab="adminTab" style="background: rgba(225, 29, 72, 0.35)">Admin</button>
+          </div>
+
+          <div class="user-chip" data-act="fazerLogoutAdmin" title="Clique para sair">🔓 Sair da conta</div>
+        </nav>
+
+        <div class="page">
+          <!-- ABA DE COMANDAS ABERTAS -->
+          <div id="comandasAbertasTab" class="tab-content glass-panel active">
+            <h2>Comandas Abertas <br /><span id="dataHojeTexto" style="font-size: 14px; color: #c084fc"></span></h2>
+            <input type="text" id="searchComandasAbertas" class="search-box" placeholder="🔍 Pesquisar comanda por cliente..." />
+            <div id="listaComandasAbertasCards"></div>
+          </div>
+
+          <!-- ABA DE CRIAR COMANDA -->
+          <div id="criarComandaTab" class="tab-content glass-panel">
+            <h2>Nova Comanda</h2>
+            <label style="font-size: 14px; color: #e9d5ff">Selecione o Cliente:</label>
+            <div class="combo" style="position: relative">
+              <input
+                type="text"
+                id="searchClienteCriar"
+                class="search-box"
+                style="margin-bottom: 0"
+                placeholder="🔍 Digite ou escolha o cliente..."
+                autocomplete="off"
+              />
+              <input type="hidden" id="selectClienteCriar" />
+              <div id="listaClienteCriar" class="combo-lista"></div>
+            </div>
+
+            <label style="font-size: 14px; color: #e9d5ff; margin-top: 10px; display: block;">Selecione o Produto:</label>
+            <div class="combo" style="position: relative">
+              <input
+                type="text"
+                id="searchProdutoCriar"
+                class="search-box"
+                style="margin-bottom: 0"
+                placeholder="🔍 Digite ou escolha o produto..."
+                autocomplete="off"
+              />
+              <input type="hidden" id="selectProdutoCriar" />
+              <div id="listaProdutoCriar" class="combo-lista"></div>
+            </div>
+
+            <button class="btn-add" data-act="abrirNovaComanda">Abrir / Adicionar à Comanda</button>
+          </div>
+
+          <!-- ABA DE PRODUTOS -->
+          <div id="produtos" class="tab-content glass-panel">
+            <h2>Gerenciar Produtos</h2>
+            <input type="text" id="searchProdutos" class="search-box" placeholder="🔍 Pesquisar produto..." />
+            <input type="text" id="prodName" placeholder="Nome do Produto" />
+            <input type="number" id="prodPrice" placeholder="Valor (R$)" />
+            <button class="btn-add" data-act="addProduto">Salvar Produto</button>
+            <div id="listaProdutos"></div>
+          </div>
+
+          <!-- ABA DE CLIENTES -->
+          <div id="clientes" class="tab-content glass-panel">
+            <h2>Gerenciar Clientes</h2>
+            <input type="text" id="searchClientes" class="search-box" placeholder="🔍 Pesquisar cliente..." />
+            <input type="text" id="clientName" placeholder="Nome do Cliente" />
+            <button class="btn-add" data-act="addCliente">Novo Cliente</button>
+            <div id="listaClientes"></div>
+          </div>
+
+          <!-- ABA DE HISTÓRICO DE COMANDAS -->
+          <div id="historico" class="tab-content glass-panel">
+            <h2>Histórico de Vendas</h2>
+            <button class="btn-excel" data-act="baixarRelatorioExcel">📊 Gerar Relatório Excel (Planilhas)</button>
+            <input type="text" id="searchHistorico" class="search-box" placeholder="🔍 Pesquisar no histórico por cliente..." />
+            <div id="listaHistorico"></div>
+          </div>
+
+          <!-- ABA DE NÃO PAGAS (FIADOS) -->
+          <div id="naoPagas" class="tab-content glass-panel">
+            <h2>Comandas Não Pagas (Fiados)</h2>
+            <input type="text" id="searchNaoPagas" class="search-box" placeholder="🔍 Pesquisar fiado por cliente..." />
+            <div id="listaNaoPagas"></div>
+          </div>
+
+          <!-- ABA DE ADMINISTRAÇÃO / BACKUPS -->
+          <div id="adminTab" class="tab-content glass-panel">
+            <h2>⚙️ Área do Administrador</h2>
+            <p style="text-align: center; font-size: 14px; color: #aaa">Ferramentas de manutenção do sistema.</p>
+
+            <div class="list-item" style="padding: 20px; border: 1px solid #10b981">
+              <h3 style="color: #10b981; margin-top: 0; text-align: center">💾 Backup do Banco de Dados</h3>
+              <p style="font-size: 13px; color: #ddd; text-align: center; margin-top: 0;">
+                Um backup é criado <b>automaticamente 1x por dia</b>, quando o servidor inicia. Baixe um de vez em quando e guarde fora deste computador (Drive, pendrive).
+              </p>
+              <div id="statusBackupExterno" style="text-align:center; font-size: 12px; margin-bottom: 8px; color: #e9d5ff;"></div>
+              <button class="btn-success" style="margin-top: 5px" data-act="backupCriar">➕ Criar backup agora</button>
+
+              <div id="listaBackups" style="margin-top: 10px"></div>
+
+              <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(192, 132, 252, 0.3);">
+                <label style="font-size: 13px; color: #e9d5ff">Perdeu o banco? Restaure a partir de um arquivo <code>.sqlite</code> que você baixou:</label>
+                <input type="file" id="backupArquivo" accept=".sqlite" />
+                <button class="btn-del" style="width: 100%; padding: 12px; margin-top: 6px" data-act="backupRestaurarUpload">♻️ Restaurar a partir do arquivo</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAIS -->
+      <div id="modalCreditoOverlay" class="modal-overlay" data-act="fecharModalCredito"></div>
+      <div id="modalCreditoBox" class="modal-box">
+        <h3 id="modalCreditoTitulo" style="margin-top: 0; color: #e9d5ff; text-align: center">Crédito</h3>
+        <input type="hidden" id="modalClientId" />
+        <input type="hidden" id="modalCreditIndex" />
+        <label style="color: #fff; font-size: 14px">Valor (R$):</label>
+        <input type="number" id="modalCreditoValor" placeholder="Ex: 50" style="margin-bottom: 15px" />
+        <label style="color: #fff; font-size: 14px">Data de Validade</label>
+        <input type="date" id="modalCreditoData" />
+        <div style="display: flex; gap: 10px; margin-top: 20px">
+          <button class="btn-del" style="width: 50%; margin: 0" data-act="fecharModalCredito">Cancelar</button>
+          <button class="btn-success" style="width: 50%; margin: 0" data-act="salvarModalCredito">Salvar</button>
+        </div>
+      </div>
+
+      <div id="modalProdutoOverlay" class="modal-overlay" data-act="fecharModalProduto"></div>
+      <div id="modalProdutoBox" class="modal-box">
+        <h3 style="margin-top: 0; color: #e9d5ff; text-align: center">Editar Produto</h3>
+        <input type="hidden" id="modalProdId" />
+        <label style="color: #fff; font-size: 14px">Nome do Produto:</label>
+        <input type="text" id="modalProdName" placeholder="Nome" style="margin-bottom: 15px" />
+        <label style="color: #fff; font-size: 14px">Valor (R$):</label>
+        <input type="number" id="modalProdPrice" placeholder="Valor" style="margin-bottom: 15px" />
+        <div style="display: flex; gap: 10px; margin-top: 10px">
+          <button class="btn-del" style="width: 50%; margin: 0" data-act="fecharModalProduto">Cancelar</button>
+          <button class="btn-success" style="width: 50%; margin: 0" data-act="salvarModalProduto">Salvar</button>
+        </div>
+      </div>
+
+      <!-- MODAL: ACESSO DO CLIENTE (login + código) -->
+      <div id="modalClienteOverlay" class="modal-overlay" data-act="fecharModalCliente"></div>
+      <div id="modalClienteBox" class="modal-box">
+        <h3 id="modalClienteTitulo" style="margin-top: 0; color: #e9d5ff; text-align: center">Acesso do Cliente</h3>
+        <input type="hidden" id="modalClienteId" />
+
+        <label style="color: #fff; font-size: 14px">Login do cliente:</label>
+        <input type="text" id="modalClienteLogin" placeholder="E-mail ou nome de usuário" autocomplete="off" autocapitalize="off" />
+
+        <label style="color: #fff; font-size: 14px">Código de acesso (4 a 6 letras ou números):</label>
+        <input type="text" id="modalClienteCodigo" maxlength="6" placeholder="Ex: Ab12" autocomplete="off" autocapitalize="off" style="font-family: monospace; letter-spacing: 2px;" />
+
+        <div style="display: flex; gap: 8px">
+          <button type="button" class="btn-ghost" style="margin: 4px 0" data-act="gerarCodigoNoModal">🎲 Gerar código</button>
+          <button type="button" id="btnResetarCodigo" class="btn-ghost" style="margin: 4px 0" data-act="resetarCodigoDoModal">🔄 Resetar</button>
+        </div>
+        <p id="modalClienteDica" style="font-size: 12px; color: var(--text-faint); margin: 4px 0 0"></p>
+
+        <div style="display: flex; gap: 10px; margin-top: 16px">
+          <button class="btn-del" style="width: 50%; margin: 0" data-act="fecharModalCliente">Cancelar</button>
+          <button class="btn-success" style="width: 50%; margin: 0" data-act="salvarModalCliente">Salvar</button>
+        </div>
+        <button type="button" id="btnRemoverAcesso" class="btn-ghost" style="margin-top: 10px; color: #fda4af" data-act="removerAcessoCliente">Remover acesso deste cliente</button>
+      </div>
+    </section>
+
+    <script src="js/api.js"></script>
+    <script src="js/shell.js"></script>
+    <script src="js/painel-cliente.js"></script>
+    <script src="js/painel-admin.js"></script>
+    <script src="js/login-cliente.js"></script>
+    <script src="js/login-admin.js"></script>
+    <script src="js/bindings.js"></script>
+  </body>
+</html>

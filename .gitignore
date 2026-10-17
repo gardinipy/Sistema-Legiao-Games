@@ -1,0 +1,28 @@
+# Dependências
+node_modules/
+
+# Ambiente e Segredos — NUNCA versionar
+.env
+.env.local
+
+# Banco de Dados e Estado (Arquivos vivos)
+*.sqlite
+backups/
+comandas_abertas.json
+
+# Saídas de Relatórios
+relatorio_legiao_games.xlsx
+
+# Scripts de apoio local e automação Windows
+sistema.vbs
+*.py
+__pycache__/
+*.pyc
+
+# Arquivos de teste e logs
+_teste_api.mjs
+_check.js
+*.log
+npm-debug.log*
+yarn-error.log*
+```
