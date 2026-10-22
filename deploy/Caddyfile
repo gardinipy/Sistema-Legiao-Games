@@ -1,0 +1,21 @@
+# Configuração do Caddy.
+#
+# O Caddy coloca HTTPS sozinho no seu domínio e repassa para o sistema,
+# que roda internamente na porta 3000 (o visitante nunca vê essa porta).
+# Ele também escreve o IP REAL do visitante em X-Forwarded-For (descartando
+# o que o próprio visitante mandar), por isso o .env usa TRUST_PROXY=1
+# e o bloqueio de força bruta aponta para o IP certo.
+#
+# Passo único no servidor: troque seudominio.com.br pelo seu domínio real
+# (nas duas linhas) e salve em /etc/caddy/Caddyfile
+
+seudominio.com.br {
+	encode zstd gzip
+	reverse_proxy localhost:3000
+}
+
+# Acesso automático ao certificado (Caddy gerencia sozinho)
+# não é preciso editar nada abaixo
+http://seudominio.com.br {
+	redir https://{host}{uri} permanent
+}
