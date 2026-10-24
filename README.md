@@ -3,6 +3,61 @@
 Sistema interno de comandas da Legião Games: clientes com crédito, produtos e
 serviços, controle de fiados, backups automáticos e relatórios em Excel.
 
+## Telas
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="Screenshots/comandas-abertas.png" alt="Comandas abertas, com itens, quantidade, forma de pagamento e observações" />
+      <p align="center"><strong>Comandas abertas</strong></p>
+    </td>
+    <td width="50%">
+      <img src="Screenshots/criar-comanda-cliente.png" alt="Criação de comanda: seleção de cliente com saldo" />
+      <p align="center"><strong>Nova comanda</strong></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="Screenshots/criar-comanda-produto.png" alt="Criação de comanda: seleção de produto com preço" />
+      <p align="center"><strong>Produtos à venda</strong></p>
+    </td>
+    <td width="50%">
+      <img src="Screenshots/historico-vendas.png" alt="Histórico de vendas com geração de relatório em Excel" />
+      <p align="center"><strong>Histórico de vendas</strong></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="Screenshots/nao-pagas-fiados.png" alt="Comandas não pagas (fiados), com opção de quitar item ou toda a dívida" />
+      <p align="center"><strong>Não pagas (fiados)</strong></p>
+    </td>
+    <td width="50%">
+      <img src="Screenshots/gerenciar-clientes.png" alt="Gerenciamento de clientes, com saldo, crédito e acesso" />
+      <p align="center"><strong>Gerenciar clientes</strong></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="Screenshots/gerenciar-produtos.png" alt="Gerenciamento de produtos com nome e valor" />
+      <p align="center"><strong>Gerenciar produtos</strong></p>
+    </td>
+    <td width="50%">
+      <img src="Screenshots/area-admin-backup.png" alt="Área do administrador com downloads e restauração de backups" />
+      <p align="center"><strong>Área do administrador</strong></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="Screenshots/login-cliente.png" alt="Acesso do cliente com login e código de acesso" />
+      <p align="center"><strong>Acesso do cliente</strong></p>
+    </td>
+    <td width="50%">
+      <img src="Screenshots/login-admin.png" alt="Login do painel administrativo" />
+      <p align="center"><strong>Painel administrativo</strong></p>
+    </td>
+  </tr>
+</table>
+
 ## Como funciona
 
 ```
@@ -19,6 +74,7 @@ nem framework de front-end — HTML/CSS/JS direto.
 
 ```
 public/               interface (HTML/CSS/JS)
+Screenshots/          telas do sistema usadas neste README
 server.js             servidor e API
 relatorio.js          relatório .xlsx gerado pelo Node (exceljs)
 backup.js             backup/restauração do banco
@@ -85,7 +141,8 @@ extra a cada 25 comandas finalizadas. Cada arquivo contém o banco completo,
 incluindo as comandas abertas. Backups com mais de 30 dias são apagados,
 preservando sempre o mais recente.
 
-Download e restauração ficam no painel administrativo. Para enviar os backups
+Download e restauração ficam na aba **Admin** do painel administrativo (tela
+"Área do administrador" acima). Para enviar os backups
 para a nuvem, configure `RCLONE_REMOTE` no `.env` (requer
 [rclone](https://rclone.org)).
 
